@@ -1,0 +1,27 @@
+{
+  "title": "Go Application Metrics",
+  "panels": [
+    {
+      "title": "Memory Usage",
+      "type": "graph",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "go_memstats_alloc_bytes{instance=\"app:8080\"}",
+          "legendFormat": "Allocated Memory"
+        }
+      ]
+    },
+    {
+      "title": "Goroutines",
+      "type": "graph",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "go_goroutines{instance=\"app:8080\"}",
+          "legendFormat": "Goroutines"
+        }
+      ]
+    }
+  ]
+}

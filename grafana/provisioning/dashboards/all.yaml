@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/grafana/grafana/main/public/app/features/provisioning/dashboards/types.cue
+apiVersion: 1
+
+providers:
+- name: 'Go Metrics'
+  orgId: 1
+  folder: ''
+  type: file
+  disableDeletion: false
+  editable: true
+  options:
+    path: /var/lib/grafana/dashboards
