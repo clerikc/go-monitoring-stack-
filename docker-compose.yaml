@@ -5,19 +5,31 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
+    networks:
+      - internal
+      - default  # для доступа Grafana к app (если нужно)
     environment:
       - PROMETHEUS_PUSH_GATEWAY=pushgateway:9091
     restart: unless-stopped
+    ports:
+      - "8080:8080"
+
 
   prometheus:
     image: prom/prometheus:latest
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
+    networks:
+      - internal
     restart: unless-stopped
+    # ports удалены, так как сервис теперь во внутренней сети
+
+  pushgateway:
+    image: prom/pushgateway:latest
+    networks:
+      - internal
+    restart: unless-stopped
+    # ports удалены, так как сервис теперь во внутренней сети
 
   grafana:
     image: grafana/grafana:latest
@@ -29,10 +41,11 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     ports:
       - "3000:3000"
+    networks:
+      - internal  # для доступа к Prometheus и другим сервисам
+      - default
     restart: unless-stopped
 
-  pushgateway:
-    image: prom/pushgateway:latest
-    ports:
-      - "9091:9091"
-    restart: unless-stopped
+networks:
+  internal:
+    internal: true  # сеть доступна только для контейнеров Docker
